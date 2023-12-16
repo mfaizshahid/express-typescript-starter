@@ -1,0 +1,38 @@
+{
+  "name": "express-typescript-starter",
+  "description": "Template to start developing a REST API with Node.js (Express), TypeScript, ESLint, Prettier, PostgreSQL, Objection, etc.",
+  "version": "0.0.0",
+  "homepage": "https://github.com/mfaizshahid/express-typescript-starter",
+  "license": "MIT",
+  "main": "./dist/app.js",
+  "author": {
+    "name": "Muhammad Faiz Shahid",
+    "url": "https://twitter.com/mfaizshahid",
+    "email": "mfaizshahid.me@gmail.com"
+  },
+  "scripts": {
+    "dev": "nodemon"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mfaizshahid/express-typescript-starter"
+  },
+  "engines": {
+    "node": ">=20.9.0",
+    "npm": ">=6.7.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.10.4",
+    "nodemon": "^3.0.2",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2"
+  }
+}
