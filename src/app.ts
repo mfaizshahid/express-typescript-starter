@@ -1,6 +1,6 @@
 import app from "@src/app_wrapper";
-const nodePort = process.env.PORT || 3000;
+import { env } from "@src/config";
 
-app.listen(nodePort, () => {
-  console.log(`Server running on port: ${nodePort}`);
+app.listen(env.port, () => {
+  console.log(`Server running on port: ${env.port}`);
 });
