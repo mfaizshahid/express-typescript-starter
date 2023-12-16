@@ -50,6 +50,7 @@ function validateEnvSchema(): IApp.EnvVariables {
       SALT_ROUND: Joi.number().default(11),
       JWT_ACCESS_EXPIRATION_DAYS: Joi.number().default(2),
       JWT_REFRESH_EXPIRATION_DAYS: Joi.number().default(30),
+      API_VERSION: Joi.number().default(1),
     })
     .unknown();
 
@@ -73,6 +74,7 @@ export default {
   dbURL: envVariables.DB_URL,
   siteTitle: envVariables.SITE_TITLE,
   saltRounds: envVariables.SALT_ROUND,
+  apiVersion: envVariables.API_VERSION,
   jwt: {
     accessTokenSecret: envVariables.ACCESS_TOKEN_SECRET,
     refreshTokenSecret: envVariables.REFRESH_TOKEN_SECRET,

@@ -1,7 +1,7 @@
 import express, { type Express } from "express";
 import cors from "cors";
 import path from "path";
-import { morgan, dbServer } from "@src/config";
+import { morgan, dbServer, routes, env } from "@src/config";
 import { globalErrorHandler } from "@src/middlewares";
 const app: Express = express();
 
@@ -13,9 +13,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(morgan.successHandler);
 app.use(morgan.errorHandler);
 
-app.use("/api", (req, res) => {
-  res.send("Hello World");
-});
+app.use(`/api/v${env.apiVersion ?? 1}`, routes);
 
 // Global error handler => Handle uncaught errors
 app.use(globalErrorHandler);

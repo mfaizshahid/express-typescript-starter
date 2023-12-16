@@ -22,6 +22,7 @@ export interface EnvVariables {
   SALT_ROUND: number;
   JWT_ACCESS_EXPIRATION_DAYS: string;
   JWT_REFRESH_EXPIRATION_DAYS: string;
+  API_VERSION: number;
 }
 
 export interface ExtendedError extends Error {
