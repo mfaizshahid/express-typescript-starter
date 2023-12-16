@@ -23,3 +23,7 @@ export interface EnvVariables {
   JWT_ACCESS_EXPIRATION_DAYS: string;
   JWT_REFRESH_EXPIRATION_DAYS: string;
 }
+
+export interface ExtendedError extends Error {
+  statusCode: number;
+}

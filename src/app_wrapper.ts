@@ -2,6 +2,7 @@ import express, { type Express } from "express";
 import cors from "cors";
 import path from "path";
 import { morgan, dbServer } from "@src/config";
+import { globalErrorHandler } from "@src/middlewares";
 const app: Express = express();
 
 void dbServer.pgConnect();
@@ -15,4 +16,7 @@ app.use(morgan.errorHandler);
 app.use("/api", (req, res) => {
   res.send("Hello World");
 });
+
+// Global error handler => Handle uncaught errors
+app.use(globalErrorHandler);
 export default app;
