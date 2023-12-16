@@ -1,9 +1,10 @@
 import express, { type Express } from "express";
 import cors from "cors";
 import path from "path";
-import { morgan } from "@src/config";
+import { morgan, dbServer } from "@src/config";
 const app: Express = express();
 
+void dbServer.pgConnect();
 app.use(express.json());
 // Enable cors
 app.use(cors({ origin: "*", optionsSuccessStatus: 200 }));
