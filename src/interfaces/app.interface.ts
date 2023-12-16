@@ -1,3 +1,5 @@
+import Joi from "joi";
+
 export enum AppEnvTypes {
   DEVELOPMENT = "development",
   PRODUCTION = "production",
@@ -27,4 +29,10 @@ export interface EnvVariables {
 
 export interface ExtendedError extends Error {
   statusCode: number;
+}
+
+export interface JoiSchema<T> {
+  body?: Joi.ObjectSchema<T>;
+  query?: Joi.ObjectSchema<T>;
+  params?: Joi.ObjectSchema<T>;
 }

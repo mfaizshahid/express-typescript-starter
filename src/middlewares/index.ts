@@ -1,3 +1,3 @@
 import globalErrorHandler from "@/middlewares/error.middleware";
-
-export { globalErrorHandler };
+import validate from "@/middlewares/validate.middleware";
+export { globalErrorHandler, validate };
