@@ -1,2 +1,3 @@
 import env from "@/config/env";
-export { env };
+import logger from "@/config/logger";
+export { env, logger };
