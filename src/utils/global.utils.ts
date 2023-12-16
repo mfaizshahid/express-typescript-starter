@@ -1,5 +1,6 @@
 import path from "path";
 import fs from "fs";
+import moment from "moment";
 
 const cleanString = (value: string): string => value.toLowerCase().trim();
 
@@ -10,7 +11,12 @@ const ensureDirectoryExists = (dirPath: string): void => {
     fs.mkdirSync(resolvedPath, { recursive: true });
   }
 };
+
+const formatDate = (date: string): string => {
+  return moment(date).toDate().toDateString();
+};
 export default {
   cleanString,
   ensureDirectoryExists,
+  formatDate,
 };
