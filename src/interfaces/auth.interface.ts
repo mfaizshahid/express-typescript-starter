@@ -9,3 +9,7 @@ export interface LoginRequestPayload {
   password: string;
   email: string;
 }
+
+export interface GenerateTokenRequestPayload {
+  refresh_token: string;
+}

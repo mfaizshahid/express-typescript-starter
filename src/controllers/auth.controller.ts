@@ -1,3 +1,4 @@
+import { env } from "@src/config";
 import { IApp, IUser } from "@src/interfaces";
 import { UserShape } from "@src/models";
 import { AuthService, UserService } from "@src/services";
@@ -140,7 +141,7 @@ const login = catchAsync(async (req, res): Promise<void> => {
  */
 const logout = catchAsync(async (req, res): Promise<void> => {
   const { user } = req;
-  if (!user) throw new ApiError(httpStatus.BAD_REQUEST, "User not found");
+  if (!user?.id) throw new ApiError(httpStatus.BAD_REQUEST, "User not found");
 
   // Fetch user from db
   const existingUser = await UserService.getUser({ id: user.id });
@@ -151,8 +152,49 @@ const logout = catchAsync(async (req, res): Promise<void> => {
   await existingUser.$query().patch({ refresh_token: null });
   new ApiResponse({}).send(res);
 });
+
+/**
+ * Generates new authentication tokens using a valid refresh token.
+ *
+ * This route handler performs the following operations:
+ * 1. Extracts the refresh token from the request parameters.
+ * 2. Verifies the refresh token using the refresh token secret.
+ * 3. Retrieves the user associated with the provided refresh token from the database.
+ * 4. Generates new authentication tokens (access token and refresh token).
+ * 5. Updates the user's refresh token in the database.
+ * 6. Sends a response containing the new tokens.
+ *
+ * @param {Request} req - Express request object with the refresh token in the request parameters.
+ * @param {Response} res - Express response object for sending responses.
+ * @returns {void} - This route handler sends a response containing the new authentication tokens.
+ */
+const generateToken = catchAsync(async (req, res): Promise<void> => {
+  const { refreshToken } = req.params;
+  const refreshSecret = env.jwt.refreshTokenSecret;
+
+  // Verify refresh token
+  AuthService.verifyToken(refreshToken, refreshSecret);
+  const existingUser = await UserService.getUser({
+    refresh_token: refreshToken,
+  }); // Get user from db
+  // If user does not exist, throw an error
+  if (!existingUser)
+    throw new ApiError(httpStatus.BAD_REQUEST, "Invalid Token");
+
+  // Generate auth tokens
+  const tokens: IApp.AuthTokens = AuthService.generateAuthTokens(
+    existingUser.id,
+    existingUser.role_details.name,
+  );
+  // Update refresh token
+  await existingUser.$query().patch({ refresh_token: tokens.refresh_token });
+  new ApiResponse({
+    tokens,
+  }).send(res);
+});
 export default {
   register,
   login,
   logout,
+  generateToken,
 };

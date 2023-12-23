@@ -17,7 +17,14 @@ const login: IApp.JoiSchema<IAuth.LoginRequestPayload> = {
   }),
 };
 
+const generateToken: IApp.JoiSchema<IAuth.GenerateTokenRequestPayload> = {
+  params: Joi.object({
+    refreshToken: Joi.string().required(),
+  }),
+};
+
 export default {
   register,
   login,
+  generateToken,
 };

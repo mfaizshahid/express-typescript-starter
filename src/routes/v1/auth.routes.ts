@@ -55,4 +55,24 @@ authRouter.post("/login", validate(AuthValidators.login), AuthController.login);
  * and the controller updates the user's refresh token to null, effectively logging them out.
  */
 authRouter.get("/logout", authenticate.token, AuthController.logout);
+
+/**
+ * Route configuration for generating a new token using a refresh token.
+ *
+ * This GET endpoint allows clients to generate new authentication tokens (access and refresh tokens)
+ * using a valid refresh token. It is associated with the `generateToken` function.
+ *
+ * @endpoint GET /generate-token/:refreshToken
+ * @middleware validate(AuthValidators.generateToken) - Middleware to validate the refresh token payload in the request.
+ * @controller AuthController.generateToken - The controller responsible for the token generation process.
+ *
+ * Note: Clients can generate new tokens by making a GET request to this endpoint with a valid refresh token.
+ * The middleware ensures the validity of the request payload, and the controller handles the process of verifying the
+ * refresh token, generating new tokens, and updating them in the user's record.
+ */
+authRouter.get(
+  "/generate-token/:refreshToken",
+  validate(AuthValidators.generateToken),
+  AuthController.generateToken,
+);
 export default authRouter;
