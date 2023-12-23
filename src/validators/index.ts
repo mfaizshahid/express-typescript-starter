@@ -1,3 +1,3 @@
 import AuthValidators from "@/validators/auth.validators";
-
-export { AuthValidators };
+import AdminValidators from "@/validators/admin.validators";
+export { AuthValidators, AdminValidators };

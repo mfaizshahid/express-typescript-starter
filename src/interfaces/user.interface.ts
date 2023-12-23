@@ -7,7 +7,6 @@ export const AuthResponseKeys = [
   "active",
   "created_at",
   "role_details",
-  "refresh_token",
 ];
 
 export interface UserWithRole extends UserModel {

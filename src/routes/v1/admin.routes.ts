@@ -1,6 +1,6 @@
-import { AuthController } from "@src/controllers";
-import { adminMiddleware, validate } from "@src/middlewares";
-import { AuthValidators } from "@src/validators";
+import { AdminController, AuthController } from "@src/controllers";
+import { authenticate, validate } from "@src/middlewares";
+import { AdminValidators, AuthValidators } from "@src/validators";
 import { Router } from "express";
 
 const adminRouter = Router();
@@ -22,6 +22,27 @@ adminRouter.get(
   "/generate-token/:refreshToken",
   validate(AuthValidators.generateToken),
   AuthController.generateToken,
+);
+
+/**
+ * Route configuration for performing actions on a user by an admin user.
+ *
+ * This PATCH endpoint allows an admin user to perform actions such as activating, deactivating, or deleting a user.
+ * It is associated with the `actionUser` function in the `AdminController`.
+ *
+ * @endpoint PATCH /action-user
+ * @middleware authenticate.adminToken - Middleware for authenticating admin users.
+ * @validator AdminValidators.actionUser - Request body validation using the specified validator.
+ * @controller AdminController.actionUser - The controller responsible for performing actions on the user.
+ *
+ * Note: This route is designed to allow admin users to perform actions like activation, deactivation, or deletion on a user account.
+ * The admin user provides the `user_id` and the `action` in the request body to specify the action to be performed.
+ */
+adminRouter.patch(
+  "/action-user",
+  authenticate.adminToken,
+  validate(AdminValidators.actionUser),
+  AdminController.actionUser,
 );
 
 export default adminRouter;
