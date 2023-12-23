@@ -36,3 +36,8 @@ export interface JoiSchema<T> {
   query?: Joi.ObjectSchema<T>;
   params?: Joi.ObjectSchema<T>;
 }
+
+export interface AuthTokens {
+  access_token: string;
+  refresh_token: string;
+}

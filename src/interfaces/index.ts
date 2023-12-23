@@ -1,3 +1,4 @@
 import * as IApp from "@/interfaces/app.interface";
 import * as IAuth from "@/interfaces/auth.interface";
-export { IApp, IAuth };
+import * as IUser from "@/interfaces/user.interface";
+export { IApp, IAuth, IUser };

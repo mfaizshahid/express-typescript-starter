@@ -15,7 +15,7 @@ export async function up(knex: Knex): Promise<void> {
     t.timestamp("created_at", { useTz: false })
       .defaultTo(knex.fn.now())
       .notNullable();
-    t.specificType("refresh_token", "varchar").notNullable();
+    t.specificType("refresh_token", "varchar").nullable();
     t.timestamp("updated_at", { useTz: false });
     t.timestamp("deleted_at", { useTz: false });
   });

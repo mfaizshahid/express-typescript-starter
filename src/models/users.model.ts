@@ -24,7 +24,7 @@ export class UserModel extends BaseModel {
   }
 
   static relationMappings = {
-    roleDetails: {
+    role_details: {
       relation: BaseModel.BelongsToOneRelation,
       modelClass: "roles.model",
       join: {
