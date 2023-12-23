@@ -12,7 +12,7 @@ import { compare, hash, genSalt } from "bcrypt";
  * @returns {string} - The generated JWT.
  */
 const generateToken = (
-  userId: string,
+  userId: number,
   expiresIn: Moment,
   secret: string = env.jwt.accessTokenSecret,
 ): string => {
@@ -45,7 +45,7 @@ const verifyToken = (
  * @returns {AuthTokens} - An object containing the generated access and refresh tokens.
  */
 const generateAuthTokens = (
-  userId: string,
+  userId: number,
   tokenType: IApp.AppRoles,
 ): IApp.AuthTokens => {
   const accessSecret =

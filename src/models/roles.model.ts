@@ -1,11 +1,11 @@
 import { BaseModel } from "@/models/base.model";
-import { type ModelObject } from "objection";
+import { PartialModelObject } from "objection";
 import { IApp } from "@src/interfaces";
 
 export class RoleModel extends BaseModel {
   static tableName = "roles";
 
-  id!: string;
+  id!: number;
   name!: IApp.AppRoles;
   description!: string;
   active!: boolean;
@@ -21,4 +21,4 @@ export class RoleModel extends BaseModel {
   }
 }
 
-export type RoleShape = ModelObject<RoleModel>;
+export type RoleShape = PartialModelObject<RoleModel>;

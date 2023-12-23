@@ -1,10 +1,9 @@
 import { BaseModel } from "@/models/base.model";
-import { type ModelObject } from "objection";
-import { IApp } from "@src/interfaces";
+import { PartialModelObject } from "objection";
 export class UserModel extends BaseModel {
   static tableName = "users";
 
-  id!: string;
+  id!: number;
   name!: string;
   email!: string;
   password!: string;
@@ -35,4 +34,4 @@ export class UserModel extends BaseModel {
   };
 }
 
-export type UserShape = ModelObject<UserModel>;
+export type UserShape = PartialModelObject<UserModel>;
