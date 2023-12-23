@@ -4,6 +4,21 @@ import { AuthValidators } from "@src/validators";
 import { Router } from "express";
 
 const authRouter = Router();
+
+/**
+ * Route configuration for retrieving user information.
+ *
+ * This GET endpoint allows authenticated users to retrieve their user information.
+ * It is associated with the `getUser` function.
+ *
+ * @endpoint GET /
+ * @middleware authenticate.token - Middleware to authenticate and authorize the user.
+ * @controller AuthController.getUser - The controller responsible for retrieving user information.
+ *
+ * Note: This route is designed to allow authenticated users to fetch their user details.
+ * It utilizes the `getUser` controller function to process the request and return the user's information.
+ */
+authRouter.get("/", authenticate.token, AuthController.getUser);
 /**
  * Route configuration for user registration.
  *

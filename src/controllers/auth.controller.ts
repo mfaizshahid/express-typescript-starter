@@ -6,6 +6,38 @@ import { ApiError, ApiResponse, catchAsync, objPicker } from "@src/utils";
 import httpStatus from "http-status";
 
 /**
+ * Controller function for retrieving user information.
+ *
+ * This function performs the following operations:
+ * 1. Extracts the user from the request object.
+ * 2. Checks if the user exists and is authenticated.
+ * 3. Retrieves the user's details from the database.
+ * 4. Picks specific user response fields for the response.
+ * 5. Sends the user's information as a success response.
+ *
+ * @param {Request} req - Express request object.
+ * @param {Response} res - Express response object for sending user information.
+ * @returns {Promise<void>} - Promise indicating the completion of the controller function.
+ *
+ * Note: This controller allows authenticated users to fetch their user information.
+ * It retrieves the user details from the database and sends them as a success response.
+ */
+const getUser = catchAsync(async (req, res): Promise<void> => {
+  const { user } = req;
+  // if user is not found, throw an error
+  if (!user?.id) throw new ApiError(httpStatus.BAD_REQUEST, "User not found");
+  const existingUser = await UserService.getUser({ id: user.id }); // Get user from db
+  // If user does not exist, throw an error
+  if (!existingUser)
+    throw new ApiError(httpStatus.BAD_REQUEST, "User not found");
+  // Pick user response fields
+  const response = objPicker.recursive(existingUser, IUser.AuthResponseKeys);
+  new ApiResponse({
+    user: response,
+  }).send(res);
+});
+
+/**
  * Controller function for user registration.
  *
  * This function performs the following operations:
@@ -193,6 +225,7 @@ const generateToken = catchAsync(async (req, res): Promise<void> => {
   }).send(res);
 });
 export default {
+  getUser,
   register,
   login,
   logout,
