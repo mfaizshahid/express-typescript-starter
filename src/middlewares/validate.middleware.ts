@@ -11,8 +11,6 @@ import { logger } from "@src/config";
  */
 const validate =
   (schema: object) => (req: Request, res: Response, next: NextFunction) => {
-    logger.info("Validating request");
-    logger.info(schema);
     const validSchema = objPicker.single(schema, ["body", "query", "params"]);
     const requiredSchema = objPicker.single(req, Object.keys(schema));
     const { value, error } = Joi.compile(validSchema)
