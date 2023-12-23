@@ -143,12 +143,10 @@ const login = catchAsync(async (req, res): Promise<void> => {
     user.id,
     user.role_details.name,
   );
+  // Storing refresh token in db
+  await user.$query().patch({ refresh_token: tokens.refresh_token });
   // Pick user response fields
   const response = objPicker.recursive(user, IUser.AuthResponseKeys);
-  // Storing refresh token in db
-  await UserService.updateUser(user.id, {
-    refresh_token: tokens.refresh_token,
-  });
   new ApiResponse({
     user: response,
     tokens,
@@ -202,7 +200,9 @@ const logout = catchAsync(async (req, res): Promise<void> => {
  */
 const generateToken = catchAsync(async (req, res): Promise<void> => {
   const { refreshToken } = req.params;
-  const refreshSecret = env.jwt.refreshTokenSecret;
+  const refreshSecret = req.adminUser
+    ? env.jwt.adminRefreshTokenSecret
+    : env.jwt.refreshTokenSecret;
 
   // Verify refresh token
   AuthService.verifyToken(refreshToken, refreshSecret);

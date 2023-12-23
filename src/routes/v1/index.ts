@@ -1,3 +1,3 @@
 import authRouter from "@/routes/v1/auth.routes";
-
-export { authRouter };
+import adminRouter from "@/routes/v1/admin.routes";
+export { authRouter, adminRouter };
