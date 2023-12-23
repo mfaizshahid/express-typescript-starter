@@ -4,3 +4,8 @@ export interface RegisterRequestPayload {
   name: string;
   rolename: string;
 }
+
+export interface LoginRequestPayload {
+  password: string;
+  email: string;
+}

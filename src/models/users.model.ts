@@ -1,5 +1,5 @@
 import { BaseModel } from "@/models/base.model";
-import { PartialModelObject } from "objection";
+import { ModelObject, PartialModelObject } from "objection";
 export class UserModel extends BaseModel {
   static tableName = "users";
 
@@ -8,7 +8,7 @@ export class UserModel extends BaseModel {
   email!: string;
   password!: string;
   active!: boolean;
-  role_id!: string;
+  role_id!: number;
   refresh_token?: string;
   created_at!: Date;
   updated_at?: Date;
@@ -34,4 +34,5 @@ export class UserModel extends BaseModel {
   };
 }
 
-export type UserShape = PartialModelObject<UserModel>;
+export type UserShape = PartialModelObject<UserModel>; // Object type with optional properties
+export type UserShapeExact = ModelObject<UserModel>; // Object type with original properties

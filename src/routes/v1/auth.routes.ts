@@ -23,4 +23,21 @@ authRouter.post(
   validate(AuthValidators.register),
   AuthController.register,
 );
+
+/**
+ * Route configuration for user login.
+ *
+ * This POST endpoint allows users to log in to their accounts.
+ * It is associated with the `login` function.
+ *
+ * @endpoint POST /login
+ * @validator AuthValidators.login - Request body validation using the specified validator.
+ * @controller AuthController.login - The controller responsible for user login.
+ *
+ * Note: Users can log in by providing their email and password.
+ * The login process includes checking for the existence of the user,
+ * verifying the user's status (active or terminated), and comparing the provided password.
+ * If all checks pass, authentication tokens are generated and returned to the client.
+ */
+authRouter.post("/login", validate(AuthValidators.login), AuthController.login);
 export default authRouter;

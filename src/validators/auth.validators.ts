@@ -10,6 +10,14 @@ const register: IApp.JoiSchema<IAuth.RegisterRequestPayload> = {
   }),
 };
 
+const login: IApp.JoiSchema<IAuth.LoginRequestPayload> = {
+  body: Joi.object<IAuth.LoginRequestPayload, true>({
+    password: Joi.string().required(),
+    email: Joi.string().email().required(),
+  }),
+};
+
 export default {
   register,
+  login,
 };

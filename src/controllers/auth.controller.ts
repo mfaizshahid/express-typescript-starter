@@ -1,4 +1,5 @@
 import { IApp, IUser } from "@src/interfaces";
+import { UserShape } from "@src/models";
 import { AuthService, UserService } from "@src/services";
 import { ApiError, ApiResponse, catchAsync, objPicker } from "@src/utils";
 import httpStatus from "http-status";
@@ -39,7 +40,7 @@ const register = catchAsync(async (req, res): Promise<void> => {
   // Encrypt password
   const hashedPassword = await AuthService.encryptPassword(password);
   // Create user payload
-  const createUserPayload: IUser.RegisterUserPayload = {
+  const createUserPayload: UserShape = {
     name: name,
     email: email,
     role_id: role.id,
@@ -55,13 +56,72 @@ const register = catchAsync(async (req, res): Promise<void> => {
   // Pick user response fields
   const response = objPicker.recursive(newUser, IUser.AuthResponseKeys);
   // Storing refresh token in db
-  await newUser.$query().update({ refresh_token: tokens.refresh_token });
+  await UserService.updateUser(newUser.id, {
+    refresh_token: tokens.refresh_token,
+  });
   new ApiResponse({
     user: response,
     tokens,
   }).send(res);
 });
 
+/**
+ * Controller function for user login.
+ *
+ * This function performs the following operations:
+ * 1. Extracts user login credentials from the request body.
+ * 2. Checks if the user exists in the database based on the provided email.
+ * 3. Handles cases where the user is not found, is terminated, or is not activated.
+ * 4. Compares the provided password with the stored encrypted password.
+ * 5. Generates authentication tokens upon successful login.
+ * 6. Updates the user's refresh token in the database.
+ * 7. Sends a success response with the user's data and tokens to the client.
+ *
+ * @param {Request} req - Express request object with the incoming login credentials.
+ * @param {Response} res - Express response object for sending the login success response.
+ * @returns {Promise<void>} - Promise indicating the completion of the controller function.
+ *
+ * Note: This controller handles user login, including verifying user existence, status, and password.
+ * If all checks pass, it generates authentication tokens and sends them along with the user's data to the client.
+ */
+const login = catchAsync(async (req, res): Promise<void> => {
+  const { email, password } = req.body;
+  // Check if user exists
+  const user = await UserService.getUser({ email });
+  // If user does not exist, throw an error
+  if (!user)
+    throw new ApiError(httpStatus.BAD_REQUEST, "Wrong email or password");
+  // Check user is deleted
+  if (user.deleted_at)
+    throw new ApiError(httpStatus.BAD_REQUEST, "Account Terminated");
+
+  // Check if user is active
+  if (!user.active)
+    throw new ApiError(httpStatus.BAD_REQUEST, "Account not activated");
+
+  // Check if password matches
+  const isMatch = await AuthService.comparePassword(password, user.password);
+  // If password does not match, throw an error
+  if (!isMatch)
+    throw new ApiError(httpStatus.BAD_REQUEST, "Wrong email or password");
+
+  // Generate auth tokens
+  const tokens: IApp.AuthTokens = AuthService.generateAuthTokens(
+    user.id,
+    user.role_details.name,
+  );
+  // Pick user response fields
+  const response = objPicker.recursive(user, IUser.AuthResponseKeys);
+  // Storing refresh token in db
+  await UserService.updateUser(user.id, {
+    refresh_token: tokens.refresh_token,
+  });
+  new ApiResponse({
+    user: response,
+    tokens,
+  }).send(res);
+});
 export default {
   register,
+  login,
 };

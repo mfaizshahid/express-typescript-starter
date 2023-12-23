@@ -1,5 +1,5 @@
 import { BaseModel } from "@/models/base.model";
-import { PartialModelObject } from "objection";
+import { ModelObject, PartialModelObject } from "objection";
 import { IApp } from "@src/interfaces";
 
 export class RoleModel extends BaseModel {
@@ -21,4 +21,5 @@ export class RoleModel extends BaseModel {
   }
 }
 
-export type RoleShape = PartialModelObject<RoleModel>;
+export type RoleShape = PartialModelObject<RoleModel>; // Object type with optional properties
+export type RoleShapeExact = ModelObject<RoleModel>; // Object type with original properties

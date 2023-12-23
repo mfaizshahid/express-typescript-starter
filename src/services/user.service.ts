@@ -1,25 +1,39 @@
-import { IUser } from "@src/interfaces";
-import { RoleModel, UserModel } from "@src/models";
+import { UserWithRole } from "@src/interfaces/user.interface";
+import { RoleModel, RoleShape, UserModel, UserShape } from "@src/models";
 
 /**
  * Get user from database by filter
- * @param filter {IUser.UserModelFilter} Filter to find user
- * @returns  {Promise<IUser.UserMode | undefinedl>} Promise with user
+ * @param filter {UserShape} Filter to find user
+ * @returns  {Promise<UserWithRole | undefinedl>} Promise with user
  */
 const getUser = async (
-  filter: IUser.UserModelFilter,
-): Promise<UserModel | undefined> => {
-  return await UserModel.query().findOne(filter);
+  filter: UserShape,
+): Promise<UserWithRole | undefined> => {
+  const query = await UserModel.query()
+    .findOne(filter)
+    .withGraphFetched("role_details");
+  return query as UserWithRole;
 };
 
 /**
- * Create a new user
- * @param payload {IUser.RegisterUserPayload} - user details to register
- * @returns {Promise<UserModel>} - The newly created user object
+ * Update user from database by filter
+ * @param filter {UserShape} Filter to find user
+ * @returns  {Promise<UserWithRole | undefinedl>} Promise with user
  */
-const createUser = async (
-  payload: IUser.RegisterUserPayload,
-): Promise<UserModel> => {
+const updateUser = async (
+  id: number,
+  payload: UserShape,
+): Promise<UserModel | undefined> => {
+  return await UserModel.query()
+    .patchAndFetchById(id, payload)
+    .withGraphFetched("role_details");
+};
+/**
+ * Create a new user
+ * @param payload {UserShape} - user details to register
+ * @returns {Promise<UserWithRole>} - The newly created user object
+ */
+const createUser = async (payload: UserShape): Promise<UserModel> => {
   return await UserModel.query()
     .insert(payload)
     .withGraphFetched("role_details");
@@ -27,12 +41,10 @@ const createUser = async (
 
 /**
  * Get role from database by filter
- * @param filter {IUser.RoleModelFilter} Filter to find role
+ * @param filter {RoleShape} Filter to find role
  * @returns  {Promise<IUser.RoleModel | undefined>} Promise with role
  */
-const getRole = async (
-  filter: IUser.RoleModelFilter,
-): Promise<RoleModel | undefined> => {
+const getRole = async (filter: RoleShape): Promise<RoleModel | undefined> => {
   return await RoleModel.query().findOne(filter);
 };
-export default { getUser, createUser, getRole };
+export default { getUser, createUser, getRole, updateUser };
