@@ -7,10 +7,10 @@ export class RoleModel extends BaseModel {
 
   id!: number;
   name!: IApp.AppRoles;
-  description!: string;
+  description?: string | null;
   active!: boolean;
   created_at!: Date;
-  updated_at?: Date;
+  updated_at?: Date | null;
 
   $beforeInsert(): void {
     this.created_at = new Date();

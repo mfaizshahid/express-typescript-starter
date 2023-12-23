@@ -121,7 +121,38 @@ const login = catchAsync(async (req, res): Promise<void> => {
     tokens,
   }).send(res);
 });
+
+/**
+ * Controller function for user logout.
+ *
+ * This function performs the following operations:
+ * 1. Fetches the user based on the user ID attached to the request object.
+ * 2. Handles cases where the user is not found.
+ * 3. Updates the user's refresh token to null, effectively logging them out.
+ * 4. Sends a success response to the client.
+ *
+ * @param {Request} req - Express request object with the authenticated user's ID.
+ * @param {Response} res - Express response object for sending the logout success response.
+ * @returns {Promise<void>} - Promise indicating the completion of the controller function.
+ *
+ * Note: This controller handles user logout by updating the user's refresh token to null,
+ * effectively revoking their access. It then sends a success response to the client.
+ */
+const logout = catchAsync(async (req, res): Promise<void> => {
+  const { user } = req;
+  if (!user) throw new ApiError(httpStatus.BAD_REQUEST, "User not found");
+
+  // Fetch user from db
+  const existingUser = await UserService.getUser({ id: user.id });
+  // If user does not exist, throw an error
+  if (!existingUser)
+    throw new ApiError(httpStatus.BAD_REQUEST, "User not found");
+  // Update refresh token
+  await existingUser.$query().patch({ refresh_token: null });
+  new ApiResponse({}).send(res);
+});
 export default {
   register,
   login,
+  logout,
 };

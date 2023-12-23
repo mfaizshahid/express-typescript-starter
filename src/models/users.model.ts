@@ -9,10 +9,10 @@ export class UserModel extends BaseModel {
   password!: string;
   active!: boolean;
   role_id!: number;
-  refresh_token?: string;
+  refresh_token?: string | null;
   created_at!: Date;
-  updated_at?: Date;
-  deleted_at?: Date;
+  updated_at?: Date | null;
+  deleted_at?: Date | null;
 
   $beforeInsert(): void {
     this.created_at = new Date();
