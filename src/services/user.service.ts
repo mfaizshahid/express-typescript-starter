@@ -5,7 +5,7 @@ import { RoleModel, UserModel } from '@src/models';
 /**
  * Get user from database by filter
  * @param filter {UserShape} Filter to find user
- * @returns  {Promise<UserWithRole | undefinedl>} Promise with user
+ * @returns  {Promise<UserWithRole | undefined>} Promise with user
  */
 const getUser = async (
   filter: UserShape,
@@ -19,7 +19,7 @@ const getUser = async (
 /**
  * Update user from database by filter
  * @param filter {UserShape} Filter to find user
- * @returns  {Promise<UserWithRole | undefinedl>} Promise with user
+ * @returns  {Promise<UserWithRole | undefined>} Promise with user
  */
 const updateUser = async (
   id: number,
