@@ -1,10 +1,10 @@
-import { IApp } from "@src/interfaces";
-import dotenv from "dotenv";
-import Joi, { type ObjectSchema } from "joi";
+import type { IApp } from '@src/interfaces';
+import dotenv from 'dotenv';
+import Joi, { type ObjectSchema } from 'joi';
 
 dotenv.config();
 // Setting node env
-process.env.NODE_ENV = process.env.NODE_ENV ?? "development";
+process.env.NODE_ENV = process.env.NODE_ENV ?? 'development';
 
 function loadEnvFile(): void {
   // Getting specific env file based on NODE_ENV
@@ -28,35 +28,37 @@ function validateEnvSchema(): IApp.EnvVariables {
   const envVarsSchema: ObjectSchema<IApp.EnvVariables> = Joi.object()
     .keys({
       NODE_ENV: Joi.string()
-        .valid("production", "staging", "development")
+        .valid('production', 'staging', 'development')
         .required()
-        .default("development"),
+        .default('development'),
       PORT: Joi.number().required(),
-      REDIS_URL: Joi.string().required().description("Redis DB URL"),
-      DB_URL: Joi.string().required().description("Postgresql DB URL"),
-      SITE_TITLE: Joi.string().required().description("App title"),
+      REDIS_URL: Joi.string().required().description('Redis DB URL'),
+      DB_URL: Joi.string().required().description('Postgresql DB URL'),
+      SITE_TITLE: Joi.string().required().description('App title'),
       ACCESS_TOKEN_SECRET: Joi.string()
         .required()
-        .description("Access Token Secret"),
+        .description('Access Token Secret'),
       REFRESH_TOKEN_SECRET: Joi.string()
         .required()
-        .description("Refresh Token Secret"),
+        .description('Refresh Token Secret'),
       ADMIN_ACCESS_TOKEN_SECRET: Joi.string()
         .required()
-        .description("Admin Access Token Secret"),
+        .description('Admin Access Token Secret'),
       ADMIN_REFRESH_TOKEN_SECRET: Joi.string()
         .required()
-        .description("Admin Refresh Token Secret"),
+        .description('Admin Refresh Token Secret'),
       SALT_ROUND: Joi.number().default(11),
       JWT_ACCESS_EXPIRATION_DAYS: Joi.number().default(2),
       JWT_REFRESH_EXPIRATION_DAYS: Joi.number().default(30),
       API_VERSION: Joi.number().default(1),
+      ADMIN_EMAIL: Joi.string().required().description('Admin email'),
+      ADMIN_PASSWORD: Joi.string().required().description('Admin password'),
     })
     .unknown();
 
   // Validate the environment variables against the schema
   const { value: EnvVariables, error } = envVarsSchema
-    .prefs({ errors: { label: "key" } })
+    .prefs({ errors: { label: 'key' } })
     .validate(process.env);
 
   if (error != null) {
@@ -82,5 +84,9 @@ export default {
     adminRefreshTokenSecret: envVariables.ADMIN_REFRESH_TOKEN_SECRET,
     accessExpiration: envVariables.JWT_ACCESS_EXPIRATION_DAYS,
     refreshExpiration: envVariables.JWT_REFRESH_EXPIRATION_DAYS,
+  },
+  admin: {
+    email: envVariables.ADMIN_EMAIL,
+    password: envVariables.ADMIN_PASSWORD,
   },
 };

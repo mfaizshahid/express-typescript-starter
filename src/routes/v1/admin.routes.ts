@@ -1,7 +1,7 @@
-import { AdminController, AuthController } from "@src/controllers";
-import { authenticate, validate } from "@src/middlewares";
-import { AdminValidators, AuthValidators } from "@src/validators";
-import { Router } from "express";
+import { AdminController, AuthController } from '@src/controllers';
+import { authenticate, validate } from '@src/middlewares';
+import { AdminValidators, AuthValidators } from '@src/validators';
+import { Router } from 'express';
 
 const adminRouter = Router();
 
@@ -19,7 +19,7 @@ const adminRouter = Router();
  * The generated token can be used for authentication purposes.
  */
 adminRouter.get(
-  "/generate-token/:refreshToken",
+  '/generate-token/:refreshToken',
   validate(AuthValidators.generateToken),
   AuthController.generateToken,
 );
@@ -39,7 +39,7 @@ adminRouter.get(
  * The admin user provides the `user_id` and the `action` in the request body to specify the action to be performed.
  */
 adminRouter.patch(
-  "/action-user",
+  '/action-user',
   authenticate.adminToken,
   validate(AdminValidators.actionUser),
   AdminController.actionUser,

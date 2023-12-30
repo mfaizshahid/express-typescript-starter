@@ -1,8 +1,8 @@
-import { type NextFunction, type Request, type Response } from "express";
-import { ApiError } from "@src/utils";
-import httpStatus from "http-status";
-import { AuthService } from "@src/services";
-import { env } from "@src/config";
+import { env } from '@src/config';
+import { AuthService } from '@src/services';
+import { ApiError } from '@src/utils';
+import { type NextFunction, type Request, type Response } from 'express';
+import httpStatus from 'http-status';
 
 /**
  * Middleware function to verify and decode the JWT token from the authorization header.
@@ -28,16 +28,16 @@ const authenticateToken = (
   try {
     // Get the JWT token from the authorization header
     const authHeader = req.headers.authorization;
-    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-      next(new ApiError(httpStatus.UNAUTHORIZED, "Token is required"));
+    if (authHeader == null || !authHeader.startsWith('Bearer ')) {
+      next(new ApiError(httpStatus.UNAUTHORIZED, 'Token is required'));
       return;
     }
-    const token = authHeader.split(" ")[1];
+    const token = authHeader.split(' ')[1];
     // Verify the JWT token using the access secret
     const payload = AuthService.verifyToken(token);
     // Attach the user ID to the request object for later use
     req.user = {
-      id: parseInt(payload.sub as string) ?? null,
+      id: parseInt(payload.sub as string, 10) ?? null,
     };
     // Call the next middleware in the chain
     next();
@@ -70,11 +70,11 @@ const authenticateAdminToken = (
   try {
     // Get the JWT token from the authorization header
     const authHeader = req.headers.authorization;
-    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-      next(new ApiError(httpStatus.UNAUTHORIZED, "Token is required"));
+    if (authHeader == null || !authHeader.startsWith('Bearer ')) {
+      next(new ApiError(httpStatus.UNAUTHORIZED, 'Token is required'));
       return;
     }
-    const token = authHeader.split(" ")[1];
+    const token = authHeader.split(' ')[1];
     // Verify the JWT token using the access secret
     const payload = AuthService.verifyToken(
       token,
@@ -82,7 +82,7 @@ const authenticateAdminToken = (
     );
     // Attach the user ID to the request object for later use
     req.user = {
-      id: parseInt(payload.sub as string) ?? null,
+      id: parseInt(payload.sub as string, 10) ?? null,
     };
     // Call the next middleware in the chain
     next();

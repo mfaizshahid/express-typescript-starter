@@ -1,4 +1,4 @@
-import { type NextFunction, type Request, type Response } from "express";
+import { type NextFunction, type Request, type Response } from 'express';
 
 /**
  * Middleware to append admin status to the request object.

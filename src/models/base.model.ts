@@ -1,4 +1,4 @@
-import { Model } from "objection";
+import { Model } from 'objection';
 
 export class BaseModel extends Model {
   static get modelPaths() {

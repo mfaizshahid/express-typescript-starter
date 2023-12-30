@@ -1,8 +1,8 @@
-import type { Knex } from "knex";
-import dotenv from "dotenv";
+import dotenv from 'dotenv';
+import type { Knex } from 'knex';
 
 // Setting node env
-process.env.NODE_ENV = process.env.NODE_ENV ?? "development";
+process.env.NODE_ENV = process.env.NODE_ENV ?? 'development';
 // Getting specific env file based on NODE_ENV
 const envFilePath = `.env.${process.env.NODE_ENV}`;
 dotenv.config({ path: envFilePath });
@@ -11,49 +11,49 @@ dotenv.config({ path: envFilePath });
 
 const config: Record<string, Knex.Config> = {
   development: {
-    client: "postgresql",
+    client: 'postgresql',
     connection: process.env.DB_URL,
     pool: {
       min: 2,
       max: 10,
     },
     migrations: {
-      tableName: "knex_migrations",
+      tableName: 'knex_migrations',
     },
     seeds: {
-      directory: "./seeds/dev",
+      directory: './seeds/dev',
     },
   },
 
   staging: {
-    client: "postgresql",
+    client: 'postgresql',
     connection: process.env.DB_URL,
     pool: {
       min: 2,
       max: 10,
     },
     migrations: {
-      tableName: "knex_migrations",
+      tableName: 'knex_migrations',
     },
     seeds: {
-      directory: "./seeds/staging",
+      directory: './seeds/staging',
     },
   },
 
   production: {
-    client: "postgresql",
+    client: 'postgresql',
     connection: process.env.DB_URL,
     pool: {
       min: 2,
       max: 10,
     },
     migrations: {
-      tableName: "knex_migrations",
+      tableName: 'knex_migrations',
     },
     seeds: {
-      directory: "./seeds/production",
+      directory: './seeds/production',
     },
   },
 };
 
-module.exports = config;
+export default config;

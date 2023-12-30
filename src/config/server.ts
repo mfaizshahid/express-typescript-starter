@@ -1,11 +1,12 @@
-import Knex from "knex";
-import env from "@/config/env";
-import { Model } from "objection";
+import Knex from 'knex';
+import { Model } from 'objection';
+
+import env from '@/config/env';
 
 function pgConnect(): void {
   // Init knex
   const knex = Knex({
-    client: "pg",
+    client: 'pg',
     connection: env.dbURL,
     pool: {
       min: 2,

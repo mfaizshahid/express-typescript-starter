@@ -1,5 +1,6 @@
-import { UserWithRole } from "@src/interfaces/user.interface";
-import { RoleModel, RoleShape, UserModel, UserShape } from "@src/models";
+import type { UserWithRole } from '@src/interfaces/user.interface';
+import type { RoleShape, UserShape } from '@src/models';
+import { RoleModel, UserModel } from '@src/models';
 
 /**
  * Get user from database by filter
@@ -11,7 +12,7 @@ const getUser = async (
 ): Promise<UserWithRole | undefined> => {
   const query = await UserModel.query()
     .findOne(filter)
-    .withGraphFetched("role_details");
+    .withGraphFetched('role_details');
   return query as UserWithRole;
 };
 
@@ -24,9 +25,9 @@ const updateUser = async (
   id: number,
   payload: UserShape,
 ): Promise<UserModel | undefined> => {
-  return await UserModel.query()
+  return UserModel.query()
     .patchAndFetchById(id, payload)
-    .withGraphFetched("role_details");
+    .withGraphFetched('role_details');
 };
 /**
  * Create a new user
@@ -34,9 +35,7 @@ const updateUser = async (
  * @returns {Promise<UserWithRole>} - The newly created user object
  */
 const createUser = async (payload: UserShape): Promise<UserModel> => {
-  return await UserModel.query()
-    .insert(payload)
-    .withGraphFetched("role_details");
+  return UserModel.query().insert(payload).withGraphFetched('role_details');
 };
 
 /**
@@ -45,6 +44,6 @@ const createUser = async (payload: UserShape): Promise<UserModel> => {
  * @returns  {Promise<IUser.RoleModel | undefined>} Promise with role
  */
 const getRole = async (filter: RoleShape): Promise<RoleModel | undefined> => {
-  return await RoleModel.query().findOne(filter);
+  return RoleModel.query().findOne(filter);
 };
 export default { getUser, createUser, getRole, updateUser };

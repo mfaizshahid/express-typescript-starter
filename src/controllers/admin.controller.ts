@@ -1,6 +1,6 @@
-import { UserService } from "@src/services";
-import { ApiError, ApiResponse, catchAsync } from "@src/utils";
-import httpStatus from "http-status";
+import { UserService } from '@src/services';
+import { ApiError, ApiResponse, catchAsync } from '@src/utils';
+import httpStatus from 'http-status';
 
 /**
  * Controller function for performing actions on a user by an admin user.
@@ -18,23 +18,25 @@ import httpStatus from "http-status";
  * Note: This controller allows admin users to perform actions on a user account based on the specified action (e.g., activation, deactivation, deletion).
  */
 const actionUser = catchAsync(async (req, res): Promise<void> => {
-  const { user_id, action } = req.body;
-  const user = await UserService.getUser({ id: user_id });
+  const { userId, action } = req.body;
+  const user = await UserService.getUser({ id: userId });
 
   // If user not exists, throw an error
-  if (!user) throw new ApiError(httpStatus.BAD_REQUEST, "User not found");
+  if (!user) throw new ApiError(httpStatus.BAD_REQUEST, 'User not found');
 
   // Operation based on action
   switch (action) {
-    case "ACTIVATE":
+    case 'ACTIVATE':
       await user.$query().patch({ active: true, deleted_at: null });
       break;
-    case "DEACTIVATE":
+    case 'DEACTIVATE':
       await user.$query().patch({ active: false });
       break;
-    case "DELETE":
+    case 'DELETE':
       await user.$query().patch({ active: false, deleted_at: new Date() });
       break;
+    default:
+      throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid action');
   }
   new ApiResponse({}, `User ${user.name} ${action} successfully`).send(res);
 });

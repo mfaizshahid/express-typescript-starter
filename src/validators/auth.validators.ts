@@ -1,5 +1,5 @@
-import { IAuth, IApp } from "@src/interfaces";
-import Joi from "joi";
+import type { IApp, IAuth } from '@src/interfaces';
+import Joi from 'joi';
 
 const register: IApp.JoiSchema<IAuth.RegisterRequestPayload> = {
   body: Joi.object<IAuth.RegisterRequestPayload, true>({

@@ -1,7 +1,7 @@
-import { AuthController } from "@src/controllers";
-import { authenticate, validate } from "@src/middlewares";
-import { AuthValidators } from "@src/validators";
-import { Router } from "express";
+import { AuthController } from '@src/controllers';
+import { authenticate, validate } from '@src/middlewares';
+import { AuthValidators } from '@src/validators';
+import { Router } from 'express';
 
 const authRouter = Router();
 
@@ -18,7 +18,7 @@ const authRouter = Router();
  * Note: This route is designed to allow authenticated users to fetch their user details.
  * It utilizes the `getUser` controller function to process the request and return the user's information.
  */
-authRouter.get("/", authenticate.token, AuthController.getUser);
+authRouter.get('/', authenticate.token, AuthController.getUser);
 /**
  * Route configuration for user registration.
  *
@@ -34,7 +34,7 @@ authRouter.get("/", authenticate.token, AuthController.getUser);
  * creating a user payload, and generating authentication tokens.
  */
 authRouter.post(
-  "/register",
+  '/register',
   validate(AuthValidators.register),
   AuthController.register,
 );
@@ -54,7 +54,7 @@ authRouter.post(
  * verifying the user's status (active or terminated), and comparing the provided password.
  * If all checks pass, authentication tokens are generated and returned to the client.
  */
-authRouter.post("/login", validate(AuthValidators.login), AuthController.login);
+authRouter.post('/login', validate(AuthValidators.login), AuthController.login);
 
 /**
  * Route configuration for user logout.
@@ -69,7 +69,7 @@ authRouter.post("/login", validate(AuthValidators.login), AuthController.login);
  * Note: Users can log out by making a GET request to this endpoint. The middleware verifies the JWT token,
  * and the controller updates the user's refresh token to null, effectively logging them out.
  */
-authRouter.get("/logout", authenticate.token, AuthController.logout);
+authRouter.get('/logout', authenticate.token, AuthController.logout);
 
 /**
  * Route configuration for generating a new token using a refresh token.
@@ -86,7 +86,7 @@ authRouter.get("/logout", authenticate.token, AuthController.logout);
  * refresh token, generating new tokens, and updating them in the user's record.
  */
 authRouter.get(
-  "/generate-token/:refreshToken",
+  '/generate-token/:refreshToken',
   validate(AuthValidators.generateToken),
   AuthController.generateToken,
 );

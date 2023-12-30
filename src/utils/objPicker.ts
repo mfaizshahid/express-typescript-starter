@@ -1,4 +1,4 @@
-import utils from "@/utils/global.utils";
+import utils from '@/utils/global.utils';
 
 /**
  * Extracts specified keys from an object and returns them in a new object.
@@ -12,6 +12,7 @@ function single(object: object, keys: string[]): object {
     if (Object.prototype.hasOwnProperty.call(object, key)) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
+      // eslint-disable-next-line no-param-reassign
       obj[key] = object[key];
     }
     return obj;
@@ -27,7 +28,7 @@ function single(object: object, keys: string[]): object {
  */
 function recursive(object: object, keys: string[]): any {
   function pickRecursively(obj: any, keyArray: string[]): object {
-    if (typeof obj !== "object" || obj === null) {
+    if (typeof obj !== 'object' || obj === null) {
       return obj;
     }
 

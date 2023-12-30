@@ -1,9 +1,9 @@
 import {
-  type Request,
-  type Response,
   type NextFunction,
+  type Request,
   type RequestHandler,
-} from "express";
+  type Response,
+} from 'express';
 
 /**
  * Wraps an asynchronous route handler function and catches any errors that occur.
@@ -19,5 +19,5 @@ const catchAsync = (fn: RequestHandler) => {
     });
   };
 };
- 
+
 export default catchAsync;

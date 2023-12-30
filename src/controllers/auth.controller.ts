@@ -1,9 +1,10 @@
-import { env } from "@src/config";
-import { IApp, IUser } from "@src/interfaces";
-import { UserShape } from "@src/models";
-import { AuthService, UserService } from "@src/services";
-import { ApiError, ApiResponse, catchAsync, objPicker } from "@src/utils";
-import httpStatus from "http-status";
+import { env } from '@src/config';
+import type { IApp } from '@src/interfaces';
+import { IUser } from '@src/interfaces';
+import type { UserShape } from '@src/models';
+import { AuthService, UserService } from '@src/services';
+import { ApiError, ApiResponse, catchAsync, objPicker } from '@src/utils';
+import httpStatus from 'http-status';
 
 /**
  * Controller function for retrieving user information.
@@ -25,11 +26,11 @@ import httpStatus from "http-status";
 const getUser = catchAsync(async (req, res): Promise<void> => {
   const { user } = req;
   // if user is not found, throw an error
-  if (!user?.id) throw new ApiError(httpStatus.BAD_REQUEST, "User not found");
+  if (!user?.id) throw new ApiError(httpStatus.BAD_REQUEST, 'User not found');
   const existingUser = await UserService.getUser({ id: user.id }); // Get user from db
   // If user does not exist, throw an error
   if (!existingUser)
-    throw new ApiError(httpStatus.BAD_REQUEST, "User not found");
+    throw new ApiError(httpStatus.BAD_REQUEST, 'User not found');
   // Pick user response fields
   const response = objPicker.recursive(existingUser, IUser.AuthResponseKeys);
   new ApiResponse({
@@ -59,23 +60,23 @@ const getUser = catchAsync(async (req, res): Promise<void> => {
  * the role exists, and the password is securely encrypted. It then creates a new user and returns the necessary tokens.
  */
 const register = catchAsync(async (req, res): Promise<void> => {
-  const { email, rolename, name, password, username } = req.body;
+  const { email, rolename, name, password } = req.body;
   // Check if email is already taken
   const user = await UserService.getUser({ email }); // Get user from db
   // If user exists, throw an error
-  if (user) throw new ApiError(httpStatus.BAD_REQUEST, "Email already taken");
+  if (user) throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
 
   // Get user role from req.body
   const role = await UserService.getRole({ name: rolename }); // Get role from db
   // If role does not exist, throw an error
-  if (!role) throw new ApiError(httpStatus.BAD_REQUEST, "Role not found");
+  if (!role) throw new ApiError(httpStatus.BAD_REQUEST, 'Role not found');
 
   // Encrypt password
   const hashedPassword = await AuthService.encryptPassword(password);
   // Create user payload
   const createUserPayload: UserShape = {
-    name: name,
-    email: email,
+    name,
+    email,
     role_id: role.id,
     password: hashedPassword,
     active: false,
@@ -123,20 +124,20 @@ const login = catchAsync(async (req, res): Promise<void> => {
   const user = await UserService.getUser({ email });
   // If user does not exist, throw an error
   if (!user)
-    throw new ApiError(httpStatus.BAD_REQUEST, "Wrong email or password");
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Wrong email or password');
   // Check user is deleted
   if (user.deleted_at)
-    throw new ApiError(httpStatus.BAD_REQUEST, "Account Terminated");
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Account Terminated');
 
   // Check if user is active
   if (!user.active)
-    throw new ApiError(httpStatus.BAD_REQUEST, "Account not activated");
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Account not activated');
 
   // Check if password matches
   const isMatch = await AuthService.comparePassword(password, user.password);
   // If password does not match, throw an error
   if (!isMatch)
-    throw new ApiError(httpStatus.BAD_REQUEST, "Wrong email or password");
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Wrong email or password');
 
   // Generate auth tokens
   const tokens: IApp.AuthTokens = AuthService.generateAuthTokens(
@@ -171,13 +172,13 @@ const login = catchAsync(async (req, res): Promise<void> => {
  */
 const logout = catchAsync(async (req, res): Promise<void> => {
   const { user } = req;
-  if (!user?.id) throw new ApiError(httpStatus.BAD_REQUEST, "User not found");
+  if (!user?.id) throw new ApiError(httpStatus.BAD_REQUEST, 'User not found');
 
   // Fetch user from db
   const existingUser = await UserService.getUser({ id: user.id });
   // If user does not exist, throw an error
   if (!existingUser)
-    throw new ApiError(httpStatus.BAD_REQUEST, "User not found");
+    throw new ApiError(httpStatus.BAD_REQUEST, 'User not found');
   // Update refresh token
   await existingUser.$query().patch({ refresh_token: null });
   new ApiResponse({}).send(res);
@@ -211,7 +212,7 @@ const generateToken = catchAsync(async (req, res): Promise<void> => {
   }); // Get user from db
   // If user does not exist, throw an error
   if (!existingUser)
-    throw new ApiError(httpStatus.BAD_REQUEST, "Invalid Token");
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid Token');
 
   // Generate auth tokens
   const tokens: IApp.AuthTokens = AuthService.generateAuthTokens(

@@ -1,6 +1,6 @@
-import path from "path";
-import fs from "fs";
-import moment from "moment";
+import fs from 'fs';
+import moment from 'moment';
+import path from 'path';
 
 const cleanString = (value: string): string => value.toLowerCase().trim();
 

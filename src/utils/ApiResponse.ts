@@ -1,10 +1,10 @@
-import { type Response } from "express";
-import httpStatus from "http-status";
+import { type Response } from 'express';
+import httpStatus from 'http-status';
 
 export default class ApiResponse<T> {
   constructor(
     protected data: T,
-    protected statusMessage: string = "Success",
+    protected statusMessage: string = 'Success',
     protected statusCode: number = httpStatus.OK,
   ) {
     this.statusCode = statusCode;

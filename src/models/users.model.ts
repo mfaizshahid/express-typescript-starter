@@ -1,17 +1,28 @@
-import { BaseModel } from "@/models/base.model";
-import { ModelObject, PartialModelObject } from "objection";
+import type { ModelObject, PartialModelObject } from 'objection';
+
+import { BaseModel } from '@/models/base.model';
+
 export class UserModel extends BaseModel {
-  static tableName = "users";
+  static tableName = 'users';
 
   id!: number;
+
   name!: string;
+
   email!: string;
+
   password!: string;
+
   active!: boolean;
+
   role_id!: number;
+
   refresh_token?: string | null;
+
   created_at!: Date;
+
   updated_at?: Date | null;
+
   deleted_at?: Date | null;
 
   $beforeInsert(): void {
@@ -25,10 +36,10 @@ export class UserModel extends BaseModel {
   static relationMappings = {
     role_details: {
       relation: BaseModel.BelongsToOneRelation,
-      modelClass: "roles.model",
+      modelClass: 'roles.model',
       join: {
-        from: "users.role_id",
-        to: "roles.id",
+        from: 'users.role_id',
+        to: 'roles.id',
       },
     },
   };

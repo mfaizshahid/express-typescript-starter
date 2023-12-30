@@ -1,8 +1,8 @@
-import { env } from "@src/config";
-import jwt, { type JwtPayload } from "jsonwebtoken";
-import moment, { type Moment } from "moment";
-import { IApp } from "@src/interfaces";
-import { compare, hash, genSalt } from "bcrypt";
+import { env } from '@src/config';
+import { IApp } from '@src/interfaces';
+import { compare, genSalt, hash } from 'bcrypt';
+import jwt, { type JwtPayload } from 'jsonwebtoken';
+import moment, { type Moment } from 'moment';
 
 /**
  * Generates a JSON Web Token (JWT) for the given user ID that expires at the specified time.
@@ -56,9 +56,9 @@ const generateAuthTokens = (
     tokenType === IApp.AppRoles.ADMIN
       ? env.jwt.adminRefreshTokenSecret
       : env.jwt.refreshTokenSecret;
-  const accessTokenExpires = moment().add(env.jwt.accessExpiration, "days");
+  const accessTokenExpires = moment().add(env.jwt.accessExpiration, 'days');
   const accessToken = generateToken(userId, accessTokenExpires, accessSecret);
-  const refreshTokenExpires = moment().add(env.jwt.refreshExpiration, "days");
+  const refreshTokenExpires = moment().add(env.jwt.refreshExpiration, 'days');
   const refreshToken = generateToken(
     userId,
     refreshTokenExpires,
@@ -76,7 +76,7 @@ const comparePassword = async (
   password: string,
   encryptedHash: string,
 ): Promise<boolean> => {
-  return await compare(password, encryptedHash);
+  return compare(password, encryptedHash);
 };
 
 /**
@@ -86,7 +86,7 @@ const comparePassword = async (
  */
 const encryptPassword = async (password: string): Promise<string> => {
   const salt: string = await genSalt(env.saltRounds);
-  return await hash(password, salt);
+  return hash(password, salt);
 };
 
 export default {

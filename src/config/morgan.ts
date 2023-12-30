@@ -1,7 +1,8 @@
-import morgan from "morgan";
-import logger from "@/config/logger";
+import morgan from 'morgan';
 
-const successHandler = morgan("combined", {
+import logger from '@/config/logger';
+
+const successHandler = morgan('combined', {
   skip: (req, res) => res.statusCode >= 400,
   stream: {
     write: (message) => {
@@ -10,7 +11,7 @@ const successHandler = morgan("combined", {
   },
 });
 
-const errorHandler = morgan("combined", {
+const errorHandler = morgan('combined', {
   skip: (req, res) => res.statusCode < 400,
   stream: {
     write: (message) => {

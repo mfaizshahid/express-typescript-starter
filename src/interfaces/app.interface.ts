@@ -1,14 +1,14 @@
-import Joi from "joi";
+import type Joi from 'joi';
 
 export enum AppEnvTypes {
-  DEVELOPMENT = "development",
-  PRODUCTION = "production",
-  STAGING = "staging",
+  DEVELOPMENT = 'development',
+  PRODUCTION = 'production',
+  STAGING = 'staging',
 }
 
 export enum AppRoles {
-  ADMIN = "admin",
-  USER = "user",
+  ADMIN = 'admin',
+  USER = 'user',
 }
 
 export interface EnvVariables {
@@ -25,6 +25,8 @@ export interface EnvVariables {
   JWT_ACCESS_EXPIRATION_DAYS: string;
   JWT_REFRESH_EXPIRATION_DAYS: string;
   API_VERSION: number;
+  ADMIN_EMAIL: string;
+  ADMIN_PASSWORD: string;
 }
 
 export interface ExtendedError extends Error {
