@@ -25,7 +25,12 @@
     "check:staged": "lint-staged",
     "fix:format": "prettier --check --write --ignore-unknown .",
     "fix:lint": "npm run check:lint -- --fix",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "migrate:up": "knex migrate:latest",
+    "migrate:down": "knex migrate:rollback",
+    "seed:run": "knex seed:run",
+    "migrate:make": "knex migrate:make",
+    "seed:make": "knex seed:make"
   },
   "repository": {
     "type": "git",

@@ -103,3 +103,8 @@ npm run start
 - `npm run check:staged`: Check staged files
 - `npm run fix:format`: Automatically fixes code formatting issues.
 - `npm run fix:lint`: Automatically fixes linting issues.
+- `npm run migrate:up`: Runs the database migration scripts to apply any changes to the database schema.
+- `npm run migrate:down`: Rolls back the most recent migration.
+- `npm run seed:run`: Seeds the database with initial or test data.
+- `npm run migrate:make <migration_name>`: Creates the migration file.
+- `npm run seed:make <seed_name>`: Create the seed file.
