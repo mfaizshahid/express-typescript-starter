@@ -6,7 +6,6 @@ const register: IApp.JoiSchema<IAuth.RegisterRequestPayload> = {
     password: Joi.string().required(),
     email: Joi.string().email().required(),
     name: Joi.string().required(),
-    rolename: Joi.string().required(),
   }),
 };
 

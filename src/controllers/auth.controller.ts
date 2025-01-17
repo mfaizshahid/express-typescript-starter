@@ -1,6 +1,5 @@
 import { env } from '@src/config';
-import type { IApp } from '@src/interfaces';
-import { IUser } from '@src/interfaces';
+import { IApp, IUser } from '@src/interfaces';
 import type { UserShape } from '@src/models';
 import { AuthService, UserService } from '@src/services';
 import { ApiError, ApiResponse, catchAsync, objPicker } from '@src/utils';
@@ -60,14 +59,14 @@ const getUser = catchAsync(async (req, res): Promise<void> => {
  * the role exists, and the password is securely encrypted. It then creates a new user and returns the necessary tokens.
  */
 const register = catchAsync(async (req, res): Promise<void> => {
-  const { email, rolename, name, password } = req.body;
+  const { email, name, password } = req.body;
   // Check if email is already taken
   const user = await UserService.getUser({ email }); // Get user from db
   // If user exists, throw an error
   if (user) throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
 
   // Get user role from req.body
-  const role = await UserService.getRole({ name: rolename }); // Get role from db
+  const role = await UserService.getRole({ name: IApp.AppRoles.USER }); // Get role from db
   // If role does not exist, throw an error
   if (!role) throw new ApiError(httpStatus.BAD_REQUEST, 'Role not found');
 
