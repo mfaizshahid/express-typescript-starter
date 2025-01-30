@@ -25,6 +25,8 @@ export class UserModel extends BaseModel {
 
   deleted_at?: Date | null;
 
+  token_version!: number;
+
   $beforeInsert(): void {
     this.created_at = new Date();
   }

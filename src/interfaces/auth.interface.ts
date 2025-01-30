@@ -1,3 +1,5 @@
+import type { IApp } from '.';
+
 export interface RegisterRequestPayload {
   password: string;
   email: string;
@@ -11,4 +13,9 @@ export interface LoginRequestPayload {
 
 export interface GenerateTokenRequestPayload {
   refresh_token: string;
+}
+
+export interface GenerateTokenOptionalParams {
+  tokenType?: IApp.TokenTypes;
+  tokenVersion?: number;
 }
