@@ -73,6 +73,8 @@ function validateEnvSchema(): IApp.EnvVariables {
         'forgot-password-secret',
       ),
       FORGOT_PASSWORD_TOKEN_EXPIRES_IN_MINUTES: Joi.number().default(60),
+      FRONTEND_DOMAIN: Joi.string().default('http://localhost:3001'),
+      BACKEND_DOMAIN: Joi.string().default('http://localhost:3000'),
     })
     .unknown();
 
@@ -97,6 +99,8 @@ export default {
   siteTitle: envVariables.SITE_TITLE,
   saltRounds: envVariables.SALT_ROUND,
   apiVersion: envVariables.API_VERSION,
+  frontendDomain: envVariables.FRONTEND_DOMAIN,
+  backendDomain: envVariables.BACKEND_DOMAIN,
   jwt: {
     accessTokenSecret: envVariables.ACCESS_TOKEN_SECRET,
     refreshTokenSecret: envVariables.REFRESH_TOKEN_SECRET,
