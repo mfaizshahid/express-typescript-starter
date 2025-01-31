@@ -27,6 +27,18 @@ export interface EnvVariables {
   API_VERSION: number;
   ADMIN_EMAIL: string;
   ADMIN_PASSWORD: string;
+  MAIL_HOST: string;
+  MAIL_PORT: number;
+  MAIL_USER: string;
+  MAIL_PASSWORD: string;
+  MAIL_DEFAULT_EMAIL: string;
+  MAIL_DEFAULT_NAME: string;
+  EMAIL_VERIFICATION_TOKEN_SECRET: string;
+  EMAIL_VERIFICATION_TOKEN_EXPIRES_IN_MINUTES: number;
+  FORGOT_PASSWORD_TOKEN_SECRET: string;
+  FORGOT_PASSWORD_TOKEN_EXPIRES_IN_MINUTES: number;
+  FRONTEND_DOMAIN: string;
+  BACKEND_DOMAIN: string;
 }
 
 export interface ExtendedError extends Error {
@@ -42,4 +54,18 @@ export interface JoiSchema<T> {
 export interface AuthTokens {
   access_token: string;
   refresh_token: string;
+}
+
+export enum TokenTypes {
+  EMAIL_VERIFICATION,
+  FORGOT_PASSWORD,
+}
+
+export interface EmailOptions {
+  to: string;
+  subject: string;
+  text?: string;
+  html?: string;
+  from?: string;
+  name?: string;
 }

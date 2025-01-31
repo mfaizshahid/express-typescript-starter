@@ -1,4 +1,5 @@
 import { env } from '@src/config';
+import type { IAuth } from '@src/interfaces';
 import { IApp } from '@src/interfaces';
 import { compare, genSalt, hash } from 'bcrypt';
 import jwt, { type JwtPayload } from 'jsonwebtoken';
@@ -15,12 +16,15 @@ const generateToken = (
   userId: number,
   expiresIn: Moment,
   secret: string = env.jwt.accessTokenSecret,
+  options: IAuth.GenerateTokenOptionalParams = {},
 ): string => {
   const payload = {
     sub: userId,
     exp: expiresIn.unix(),
     audience: env.siteTitle,
     issuer: env.siteTitle,
+    token_type: options.tokenType,
+    token_version: options.tokenVersion,
   };
   return jwt.sign(payload, secret);
 };
