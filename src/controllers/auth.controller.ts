@@ -1,9 +1,11 @@
-import { env } from '@src/config';
+import { env, logger } from '@src/config';
 import { IApp, IUser } from '@src/interfaces';
+import { AuthMailTemplates } from '@src/mail-templates';
 import type { UserShape } from '@src/models';
-import { AuthService, UserService } from '@src/services';
+import { AuthService, MailerService, UserService } from '@src/services';
 import { ApiError, ApiResponse, catchAsync, objPicker } from '@src/utils';
 import httpStatus from 'http-status';
+import moment from 'moment';
 
 /**
  * Controller function for retrieving user information.
@@ -60,6 +62,7 @@ const getUser = catchAsync(async (req, res): Promise<void> => {
  */
 const register = catchAsync(async (req, res): Promise<void> => {
   const { email, name, password } = req.body;
+  logger.info(`Registering user with email: ${email}`);
   // Check if email is already taken
   const user = await UserService.getUser({ email }); // Get user from db
   // If user exists, throw an error
@@ -72,6 +75,7 @@ const register = catchAsync(async (req, res): Promise<void> => {
 
   // Encrypt password
   const hashedPassword = await AuthService.encryptPassword(password);
+
   // Create user payload
   const createUserPayload: UserShape = {
     name,
@@ -81,6 +85,18 @@ const register = catchAsync(async (req, res): Promise<void> => {
     active: false,
   };
   const newUser = await UserService.createUser(createUserPayload); // Create user in db
+
+  // Generate email verification token
+  const emailVerificationToken = AuthService.generateToken(
+    newUser.id,
+    moment().add(env.emailVerification.expiresInMinutes, 'minutes'),
+    env.emailVerification.secret,
+    {
+      tokenType: IApp.TokenTypes.EMAIL_VERIFICATION,
+      tokenVersion: 1,
+    },
+  );
+
   // Generate auth tokens
   const tokens: IApp.AuthTokens = AuthService.generateAuthTokens(
     newUser.id,
@@ -91,11 +107,30 @@ const register = catchAsync(async (req, res): Promise<void> => {
   // Storing refresh token in db
   await UserService.updateUser(newUser.id, {
     refresh_token: tokens.refresh_token,
+    token_version: 1,
   });
+  const emailSendPayload: IApp.EmailOptions = {
+    subject: `Verify Your Email to Get Started 🚀 - ${env.siteTitle}`,
+    to: newUser.email,
+    html: AuthMailTemplates.userRegisteredTemplate({
+      link: `${env.frontendDomain}/auth/verify-email/${emailVerificationToken}`,
+      expiryTime: `${env.emailVerification.expiresInMinutes} minutes`,
+      username: newUser.name,
+    }),
+  };
+  logger.info(`Sending email verification to ${newUser.email}`);
   new ApiResponse({
     user: response,
     tokens,
   }).send(res);
+  try {
+    await MailerService.sendEmail(emailSendPayload);
+  } catch (error: any) {
+    logger.error(
+      `Failed to send email verification to ${newUser.email}`,
+      error.message,
+    );
+  }
 });
 
 /**

@@ -19,3 +19,9 @@ export interface GenerateTokenOptionalParams {
   tokenType?: IApp.TokenTypes;
   tokenVersion?: number;
 }
+
+export interface UserRegisteredTemplatePayload {
+  link: string;
+  expiryTime: string;
+  username: string;
+}
